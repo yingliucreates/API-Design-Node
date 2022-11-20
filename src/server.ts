@@ -2,7 +2,7 @@ import express from 'express';
 import router from './router';
 import morgan from 'morgan';
 import cors from 'cors';
-import { resolve } from 'path';
+import { protect } from './modules/auth';
 
 const app = express();
 //app.use() takes in a middleware;
@@ -25,6 +25,6 @@ app.get('/', (req, res) => {
 	res.json({ message: 'hello from root' });
 });
 
-app.use('/api', router);
+app.use('/api', protect, router);
 
 export default app;
