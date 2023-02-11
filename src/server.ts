@@ -1,5 +1,7 @@
 import express from 'express';
 import router from './router';
+/*Morgan is an HTTP request level Middleware. It is a great tool that logs the requests along with some other information depending upon its configuration and the preset used. It proves to be very helpful while debugging and also if you want to create Log files.
+ */
 import morgan from 'morgan';
 import cors from 'cors';
 import { protect } from './modules/auth';
@@ -29,4 +31,5 @@ app.get('/', (req, res) => {
 app.use('/api', protect, router);
 app.post('/user', createNewUser);
 app.post('/signin', signin);
+
 export default app;
