@@ -7,6 +7,7 @@ router.get('/product', (req, res) => {
 	res.json({ message: 'products' });
 });
 router.get('/product/:id', () => {});
+
 router.put(
 	'/product/:id',
 	body('name').isString(),
@@ -15,9 +16,14 @@ router.put(
 		res.json({ message: 'products' });
 	}
 );
-router.post('/product', (req, res) => {
-	res.json({ message: 'postProd' });
-});
+router.post(
+	'/product',
+	body('name').isString(),
+	handleInputErrors,
+	(req, res) => {
+		res.json({ message: 'postProd' });
+	}
+);
 router.delete('/product/:id', () => {});
 
 router.get('/update', () => {});
@@ -28,7 +34,7 @@ router.put(
 	body('body').optional(),
 	body('status').isIn(['IN_PROGRESS', 'SHIPPED', 'DEPRECATED']).optional(),
 	body('version').optional(),
-	() => {}
+	(req, res) => {}
 );
 router.post(
 	'/update',
