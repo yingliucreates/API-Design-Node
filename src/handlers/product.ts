@@ -1,17 +1,22 @@
 import prisma from '../db';
 
 //get all
-export const getProducts = async (req, res) => {
-	const user = await prisma.user.findUnique({
-		where: {
-			id: req.user.id
-		},
-		include: {
-			products: true
-		}
-	});
+export const getProducts = async (req, res, next) => {
+	try {
+		const user = await prisma.user.findUnique({
+			where: {
+				id: req.user.id
+			},
+			include: {
+				products: true
+			}
+		});
 
-	res.json({ data: user.products });
+		res.json({ data: user.products });
+	} catch (e) {
+		e.type('auth');
+		next(e);
+	}
 };
 
 //get one
@@ -30,15 +35,20 @@ export const getOneProduct = async (req, res) => {
 };
 //create one
 
-export const createProduct = async (req, res) => {
-	const product = await prisma.product.create({
-		data: {
-			name: req.body.name,
-			belongsToId: req.user.id
-		}
-	});
+export const createProduct = async (req, res, next) => {
+	try {
+		const product = await prisma.product.create({
+			data: {
+				name: req.body.name,
+				belongsToId: req.user.id
+			}
+		});
 
-	res.json({ data: product });
+		res.json({ data: product });
+	} catch (e) {
+		e.type = 'input';
+		next(e);
+	}
 };
 
 export const updateProduct = async (req, res) => {
