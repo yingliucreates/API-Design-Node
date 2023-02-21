@@ -23,13 +23,28 @@ const customLogger = middlewareName => (req, res, next) => {
 
 // app.use(customLogger('customLogger'));
 
-app.get('/', (req, res) => {
-	res.status(200);
-	res.json({ message: 'hello from root' });
+/* catch asynchronous error
+ ** explicitly tell express that there's an error by wrapping the error with next();
+ ** so that it can trigger the error handler down there
+ */
+app.get('/', (req, res, next) => {
+	setTimeout(() => {
+		next(new Error('hello'));
+	}, 1);
 });
 
 app.use('/api', protect, router);
 app.post('/user', createNewUser);
 app.post('/signin', signin);
 
+//synchronous error handling
+app.use((err, req, res, next) => {
+	if (err.type === 'auth') {
+		res.status(401).json({ message: 'unauthorized' });
+	} else if (err.type === 'input') {
+		res.status(400).json({ message: 'invalid input' });
+	} else {
+		res.status(500).json({ message: 'oops thats on us' });
+	}
+});
 export default app;

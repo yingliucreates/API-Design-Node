@@ -25,6 +25,8 @@ model Product {
   belongsToId String
   belongsTo   User     @relation(fields: [belongsToId], references: [id])
   updates     Update[]
+
+  @@unique([id, belongsToId])
 }
 
 enum UPDATE_STATUS {
@@ -36,7 +38,7 @@ enum UPDATE_STATUS {
 model Update {
   id          String        @id @default(uuid())
   createdAt   DateTime      @default(now())
-  updateAt    DateTime
+  updateAt    DateTime      @updatedAt
   title       String
   body        String
   status      UPDATE_STATUS @default(IN_PROGRESS)
