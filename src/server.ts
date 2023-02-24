@@ -28,9 +28,11 @@ const customLogger = middlewareName => (req, res, next) => {
  ** so that it can trigger the error handler down there
  */
 app.get('/', (req, res, next) => {
-	setTimeout(() => {
-		next(new Error('hello'));
-	}, 1);
+	// setTimeout(() => {
+	// 	next(new Error('hello'));
+	// }, 1);
+
+	res.json({ message: 'hello' });
 });
 
 app.use('/api', protect, router);
